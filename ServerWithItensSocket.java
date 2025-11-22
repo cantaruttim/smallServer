@@ -14,34 +14,37 @@ public class ServerWithItensSocket {
         try (ServerSocket serverSocket = new ServerSocket(8000)) {
             System.out.println("Server is running");
 
-            try (Socket clientSocket = serverSocket.accept()) {
-                // what the client had write
-                InputStream clientIS = clientSocket.getInputStream();
+            // infinite loop
+            while (true) {
+                try (Socket clientSocket = serverSocket.accept()) {
+                    // what the client had write
+                    InputStream clientIS = clientSocket.getInputStream();
 
-                StringBuilder requestBuilder = new StringBuilder();
-                // reading request data - Headers
-                int data;
-                do {
-                    data = clientIS.read();
-                    requestBuilder.append((char) data);
+                    StringBuilder requestBuilder = new StringBuilder();
+                    // reading request data - Headers
+                    int data;
+                    do {
+                        data = clientIS.read();
+                        requestBuilder.append((char) data);
 
-                } while (clientIS.available() > 0);
+                    } while (clientIS.available() > 0);
 
-                String request = requestBuilder.toString();
-                System.out.println(request);
+                    String request = requestBuilder.toString();
+                    System.out.println(request);
 
-                Path path = Path.of("itensCardapio.json");
-                String json = Files.readString(path);
+                    Path path = Path.of("itensCardapio.json");
+                    String json = Files.readString(path);
 
-                OutputStream clientOS = clientSocket.getOutputStream();
-                PrintStream clientOut = new PrintStream(clientOS);
+                    OutputStream clientOS = clientSocket.getOutputStream();
+                    PrintStream clientOut = new PrintStream(clientOS);
 
 
-                clientOut.println("HTTP/1.1 200 OK");
-                clientOut.println("Content-type: application/json; chatset=UTF-8");
-                clientOut.println();
-                clientOut.println(json);
+                    clientOut.println("HTTP/1.1 200 OK");
+                    clientOut.println("Content-type: application/json; chatset=UTF-8");
+                    clientOut.println();
+                    clientOut.println(json);
 
+                }
             }
 
 
