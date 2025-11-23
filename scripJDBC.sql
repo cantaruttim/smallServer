@@ -2,7 +2,7 @@ use menu;
 
 
 
-
+drop table if exists itemCardapio;
 create table itemCardapio(
 	id bigint primary key auto_increment,
     nome varchar(100) not null,
